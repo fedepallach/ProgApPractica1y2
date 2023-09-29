@@ -3,13 +3,12 @@
 #include<string.h>
 
 void Menu(int *opcion);
-//void seleccionarImagen(FILE *archivo);
 void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50]);
 void crearMatriz(unsigned char ***tabla,int col,int ren);
 void Introduccion();
 void Enter();
 void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50]);
-void Cerrar(unsigned char **tabla,int ren);
+//void Cerrar(unsigned char **tabla,int ren);
 void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[]);
 void generarEncabezado(char encab2[],int col,int ren);
 void negativoImagen(unsigned char **tabla,int col,int ren);
@@ -22,21 +21,20 @@ int main(void)
   int opcion,col,ren,i;
   unsigned char **tabla;
   char nombrearch[50],encab2[20];
-  //FILE *archivo;
   Introduccion();
-  //seleccionarImagen(archivo);
   seleccionarImagenYObtColReng(&col,&ren,nombrearch);
   printf("\n%s",nombrearch);
   
-  //crearMatriz(&tabla,col,ren); //CODIGO EN MAIN
+  //CODIGO EN MAIN en vez de crearMatriz(&tabla,col,ren)
   tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
   for(i=0; i<ren;i++)
     {
       tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
     }
   //FIN DE CODIGO EN MAIN
+  
   llenarMatriz(tabla,col,ren,nombrearch);
-  //printf("\n%d",tabla[0][3]);   SI PODEMOS LEER BIEN LA TABLA
+  printf("\nPrueba de que se lee el archivo,\nEl elemento 0,3 es: %d",tabla[0][3]);   SI PODEMOS LEER BIEN LA TABLA
   do
     {
       Menu(&opcion);
@@ -48,18 +46,19 @@ int main(void)
         case 2:
 	  ecualizarImagen(tabla,col,ren);
           break;
-        case 3:
-          //ampliarImagen();
+        case 3: 
+	  ampliarImagenYGuardar(tabla,col,ren);
           break;
         case 4:
-          //ReducirImagen();
+          reducirImagenYGuardar(tabla,col,ren);
           break;
 	case 5:
-	  generarEncabezado(encab2,col,ren); //col2 ren2 realmente
+	  generarEncabezado(encab2,col,ren);
 	  guardarImagen(tabla,col,ren,encab2);
         case 6:
           printf("Buen dia\n");
-	  //Cerrar(tabla,ren);   //INICIA CODIGO EN MAIN
+
+	  //INICIA CODIGO EN MAIN en vez de Cerrar(tabla,ren)
 	  for(i=0;i<ren;i++)
 	    {
 	      free(tabla[i]);
@@ -93,7 +92,7 @@ void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
   printf("Por favor introduce el nombre del archivo de la imagen:");
   __fpurge(stdin);
   gets(nombrearch);
-  archivo=fopen(nombrearch,"rb");//este es el que
+  archivo=fopen(nombrearch,"rb");
   __fpurge(stdin);
 
   if(archivo!=NULL)
@@ -106,9 +105,11 @@ void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
   fclose(archivo);
   
 }
-/*    ESTA LA PROGRAMAMOS DIRECTO EN EL MAIN
+
+// ESTA LA PROGRAMAMOS DIRECTO EN EL MAIN
 void crearMatriz(unsigned char ***tabla,int col,int ren)
 {
+  /*
   int i;
   *tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
   for(i=0; i<ren;i++)
@@ -116,17 +117,16 @@ void crearMatriz(unsigned char ***tabla,int col,int ren)
       *tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
     }
     //Liberar en Cerrar()
+    */
 }
-*/
+
 
 
 void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
 {
   
-  //unsigned char tab[486][479];
   FILE *archivo;
-  int i,j; //encab=15
-  
+  int i,j;
   archivo=fopen(nombrearch,"rb");
   __fpurge(stdin);
   
@@ -138,7 +138,8 @@ void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
 	{
 	  for(j=0;j<col;j++)//479
 	    {
-	      fread(&tabla[i][j],1,1,archivo);	
+	      fread(&tabla[i][j],1,1,archivo);
+	      //Prueba para imprimir la tabla:
 	      //printf("\nPixel %d %d es %d\n",i,j,tabla[i][j]);
 	    }
 	}
@@ -148,9 +149,6 @@ void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
     printf("El archivo no existe en la direccion de trabajo");
   fclose(archivo);
   
-
-  //fread(&valP,1,1,archivo);
-  //printf("\nPrimer pixel es %d\n",valP);
 }
 
 void Enter()
@@ -196,7 +194,6 @@ void ecualizarImagen(unsigned char **tabla, int col, int ren)
 {
   unsigned char max=tabla[0][0];
   unsigned char min=tabla[0][0];
-  //unsigned char pixEQ[col][ren];
   int i,j,m,b;
 
   //ENCONTRAR MAXIMO
