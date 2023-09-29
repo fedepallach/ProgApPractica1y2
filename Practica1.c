@@ -2,22 +2,25 @@
 #include<stdlib.h>
 #include<string.h>
 
-void seleccionarImagen();
 void menu(int *opcion);
+void seleccionarImagenYObtColReng(int *col,int *reng);
+
+void crearMatriz(int **tabla);
 
 int main(void)
 {
-  int opcion;
+  int opcion,col,reng;
+  int **tabla;
   printf("\nBienvenido al programa para modificar imagenes!\n");
-  seleccionarImagen();
+  seleccionarImagenYObtColReng(&col,&reng);
+  printf("%d,%d",col,reng);
   do
     {
       menu(&opcion);
       switch (opcion)
         {
         case 1:
-          //Negativo();
-	  
+          //Negativo();	  
           break;
         case 2:
           //Ecualizacion();
@@ -51,28 +54,48 @@ void menu(int *opcion)
 //datosTemps=(int*)malloc(sizeof(int)*cantidad);
 
 //void carga(tipoalumno grupo[], int *insertados);
-void seleccionarImagen()
+void seleccionarImagenYObtColReng(int *col,int *reng)
 {
   FILE *archivo;
   char nombrearch[50];
+  char numCol[4],numRen[4];
+  unsigned char valP;
   
-  printf("Por favor introduce el nombre del archivo de la imagen: ");
-      __fpurge(stdin);
-      gets(nombrearch);
-      archivo=fopen(nombrearch,"rt");
-      if(archivo!=NULL)
-        {
-          //*insertados=0;
-          //while(!feof(archivo)&&(*insertados<30))
-          //  {
-              //fgets(grupo[*insertados].nombre,28,archivo);
-              //grupo[*insertados].nombre[strlen(grupo[*insertados].nombre)-1]='\0';
-              //fscanf(archivo,"%f,%f,%f\n",&grupo[*insertados].c1,&grupo[*insertados].c2,&grupo[*insertados].c3);
-              //fscanf(archivo,"%f\n",&grupo[*insertados].prom);
-              //(*insertados)++;
-	  // }
-          fclose(archivo);
-	}
-      else
-	printf("El archivo no existe en la direccion de trabajo");
+  printf("Por favor introduce el nombre del archivo de la imagen:");
+  __fpurge(stdin);
+  gets(nombrearch);
+  archivo=fopen(nombrearch,"rb");//este es el que
+  //__fpurge(stdin);
+  
+  if(archivo!=NULL)
+    { 
+      fseek(archivo,sizeof(char)*3L,SEEK_SET); //habia puesto 4
+      fread(numCol,sizeof(char)*3,1,archivo);
+      *(numCol[3])="\0";
+      //fread(&numCol,sizeof(int),1,archivo);
+
+      printf("Columnas: %s\n",numCol);
+      //*col = numCol;
+      fseek(archivo,sizeof(char)*1L,SEEK_CUR);
+      fread(numRen,sizeof(char)*3,1,archivo);
+      *(numRen[3])="\0";
+      //fread(&numReng,sizeof(int),1,archivo);
+      printf("Renglones %s el ant\n",numReng);
+      *reng = (int)numReng;
+
+      //Extra para entender
+      fseek(archivo,sizeof(char)*5L,SEEK_CUR);
+      //fseek(archivo,0L,SEEK_SET);
+      //fread(&valP,1,1,archivo);
+      fread(&valP,1,1,archivo);
+      printf("Primer pixel es %d\n",valP);
+      
+    }
+  else
+    printf("El archivo no existe en la direccion de trabajo");
+  fclose(archivo);
+}
+
+void crearMatriz(int **tabla)
+{
 }

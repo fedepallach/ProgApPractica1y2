@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+typedef struct {
+  char width[3];
+  char height[3];
+} ImageHeader;
+
+int main() {
+   char filename[100];
+   printf("Ingrese el nombre del archivo: ");
+   scanf("%s", filename);
+
+   FILE* file = fopen(filename, "rb");
+   if (file == NULL) {
+       printf("No se pudo abrir el archivo.\n");
+       return 1;
+   }
+
+   ImageHeader header;
+   fread(&header, sizeof(ImageHeader), 1, file);
+
+   printf("Dimensiones de la imagen: %s x %s\n", header.width, header.height);
+
+   fclose(file);
+   return 0;
+}
