@@ -2,17 +2,18 @@
 #include<stdlib.h>
 #include<string.h>
 
-void menu(int *opcion);
+void Menu(int *opcion);
 //void seleccionarImagen(FILE *archivo);
 void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50]);
-void crearMatriz(unsigned char **tabla,int col,int ren);
+void crearMatriz(unsigned char ***tabla,int col,int ren);
 void Introduccion();
 void Enter();
 void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50]);
+void Cerrar(unsigned char **tabla,int ren);
 
 int main(void)
 {
-  int opcion,col,ren;
+  int opcion,col,ren,i;
   unsigned char **tabla;
   char nombrearch[50];
   //FILE *archivo;
@@ -20,13 +21,20 @@ int main(void)
   //seleccionarImagen(archivo);
   seleccionarImagenYObtColReng(&col,&ren,nombrearch);
   printf("\n%s",nombrearch);
-  //printf("%d,%d",col,ren);
-  //crearMatriz(tabla,col,ren);
-  llenarMatriz(tabla,col,ren,nombrearch);
+
+  //crearMatriz(&tabla,col,ren); //CODIGO EN MAIN
+  tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
+  for(i=0; i<ren;i++)
+    {
+      tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
+    }
+  //FIN DE CODIGO EN MAIN
+
   
+  llenarMatriz(tabla,col,ren,nombrearch);
   do
     {
-      menu(&opcion);
+      Menu(&opcion);
       switch (opcion)
         {
         case 1:
@@ -43,9 +51,18 @@ int main(void)
           break;
         case 5:
           printf("Buen dia\n");
+	  
+	  //Cerrar(tabla,ren);   //INICIA CODIGO EN MAIN
+	  for(i=0;i<ren;i++)
+	    {
+	      free(tabla[i]);
+	    }
+	  free(tabla);
+	  //FIN DE CODIGO EN MAIN
+	  
           break;
 	default:
-          printf("La opcion es invalida\n");
+	  printf("La opcion es invalida\n");
           break;
         }
     }while(opcion!=5);
@@ -53,7 +70,7 @@ int main(void)
   
 }
 
-void menu(int *opcion)
+void Menu(int *opcion)
 {
   printf("Ingrese lo que desea hacer con una imagen\n");
   printf("1.Negativo\n2.Ecualizacion\n3.Ampliar Imagen\n4.Reducir Imagen\n5.Salir");
@@ -110,21 +127,18 @@ void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
   fclose(archivo);
   
 }
-
-void crearMatriz(unsigned char **tabla,int col,int ren)
+/*
+void crearMatriz(unsigned char ***tabla,int col,int ren)
 {
   int i;
-  tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
+  *tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
   for(i=0; i<ren;i++)
-    tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
-  //Liberar
-  for(i=0;i<ren;i++)
     {
-      free(tabla[i]);
+      *tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
     }
-  free(tabla);
+    //Liberar en Cerrar()
 }
-
+*/
 void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
 {
   
@@ -139,12 +153,12 @@ void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
   if(archivo!=NULL)
     {
       fseek(archivo,sizeof(unsigned char)*15L,SEEK_SET);
-      for(i=0;i<486;i++)
+      for(i=0;i<486;i++)//486
 	{
-	  for(j=0;j<479;j++)
+	  for(j=0;j<479;j++)//479
 	    {
-	      fread(&tab[i][j],1,1,archivo);	
-	      printf("\nPixel %d %d es %d\n",i,j,tab[i][j]);
+	      fread(&tabla[i][j],1,1,archivo);	
+	      printf("\nPixel %d %d es %d\n",i,j,tabla[i][j]);
 	    }
 	}
 
@@ -191,3 +205,14 @@ void Introduccion()
 
   Enter();
 }
+
+void Cerrar(unsigned char **tabla,int ren)
+{
+  int i;
+    for(i=0;i<ren;i++)
+    {
+      free(tabla[i]);
+    }
+  free(tabla);
+}
+
