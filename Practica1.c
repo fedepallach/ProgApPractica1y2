@@ -85,7 +85,6 @@ void Menu(int *opcion)
 void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
 {
   FILE *archivo;
-  //char nombrearch[50];
   char Encabezado[15];
   unsigned char valP;
   printf("Por favor introduce el nombre del archivo de la imagen:");
@@ -197,7 +196,7 @@ void generarEncabezado(char encab2[],int col,int ren)
   strcat(encab2,renS);
   strcat(encab2," 255 ");
   __fpurge(stdin);
-  puts(encab2); //TIENE SEGMENTATION FAULT
+  puts(encab2);
 }
 
 void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
@@ -216,7 +215,7 @@ void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
 	{
 	  for(j=0;j<col;j++)
 	    {
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos...
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
 	    }
 	}
       fclose(archivo);
