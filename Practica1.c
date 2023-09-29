@@ -3,17 +3,18 @@
 #include<string.h>
 
 void menu(int *opcion);
-void seleccionarImagenYObtColReng(int *col,int *reng);
-
-void crearMatriz(int **tabla);
+void seleccionarImagenYObtColReng(int *col,int *ren);
+void crearMatriz(int **tabla,int col,int ren);
 
 int main(void)
 {
-  int opcion,col,reng;
+  int opcion,col,ren;
   int **tabla;
   printf("\nBienvenido al programa para modificar imagenes!\n");
+  printf("-------------------------Practica 1--------------------------------------------\nProgramadores: \nBosco Attolini -227013-A\nFederico Pallach -208036-1\n");
   seleccionarImagenYObtColReng(&col,&reng);
-  printf("%d,%d",col,reng);
+  crearMatriz(tabla,col,ren);
+  
   do
     {
       menu(&opcion);
@@ -50,52 +51,63 @@ void menu(int *opcion)
   scanf("%d",opcion);
 }
 
-//int *datosTemps
-//datosTemps=(int*)malloc(sizeof(int)*cantidad);
-
 //void carga(tipoalumno grupo[], int *insertados);
-void seleccionarImagenYObtColReng(int *col,int *reng)
+void crearMatriz(int **tabla)
+{
+}
+
+void seleccionarImagenYObtColReng(int *col,int *ren)
 {
   FILE *archivo;
   char nombrearch[50];
-  char numCol[4],numRen[4];
-  unsigned char valP;
+  char Encabezado[15];
+  int valP;
+  //int numCol,numRen;
   
+  //int numCol,numReng, valP;
+
   printf("Por favor introduce el nombre del archivo de la imagen:");
   __fpurge(stdin);
   gets(nombrearch);
   archivo=fopen(nombrearch,"rb");//este es el que
-  //__fpurge(stdin);
-  
-  if(archivo!=NULL)
-    { 
-      fseek(archivo,sizeof(char)*3L,SEEK_SET); //habia puesto 4
-      fread(numCol,sizeof(char)*3,1,archivo);
-      *(numCol[3])="\0";
-      //fread(&numCol,sizeof(int),1,archivo);
+  __fpurge(stdin);
 
-      printf("Columnas: %s\n",numCol);
-      //*col = numCol;
-      fseek(archivo,sizeof(char)*1L,SEEK_CUR);
-      fread(numRen,sizeof(char)*3,1,archivo);
-      *(numRen[3])="\0";
-      //fread(&numReng,sizeof(int),1,archivo);
-      printf("Renglones %s el ant\n",numReng);
-      *reng = (int)numReng;
+  if(archivo!=NULL)
+    {
+      fread(Encabezado,sizeof(unsigned char),15,archivo);
+      sscanf(Encabezado,"P5 %d %d 255 ", col, ren);
 
       //Extra para entender
-      fseek(archivo,sizeof(char)*5L,SEEK_CUR);
+      //fseek(archivo,sizeof(char)*5L,SEEK_CUR);
       //fseek(archivo,0L,SEEK_SET);
       //fread(&valP,1,1,archivo);
-      fread(&valP,1,1,archivo);
-      printf("Primer pixel es %d\n",valP);
       
+      //fread(&valP,1,1,archivo);
+      //printf("\nPrimer pixel es %d\n",valP);
     }
   else
     printf("El archivo no existe en la direccion de trabajo");
   fclose(archivo);
 }
 
-void crearMatriz(int **tabla)
+void crearMatriz(unsigned char **tabla,int col,int ren)
 {
+  int i;
+  tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
+  for(i=0; i<ren;i++)
+    tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
+  //Liberar
+  for(i=0;i<ren;i++)
+    {
+      free(tabla[i]);
+    }
+  free(tabla);
 }
+/*
+//Extra para entender
+      fseek(archivo,sizeof(char)*5L,SEEK_CUR);
+      //fseek(archivo,0L,SEEK_SET);
+      //fread(&valP,1,1,archivo);
+      fread(&valP,1,1,archivo);
+      printf("Primer pixel es %d\n",valP);
+*/
