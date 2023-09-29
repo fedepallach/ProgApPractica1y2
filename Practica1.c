@@ -12,7 +12,10 @@ void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50]);
 void Cerrar(unsigned char **tabla,int ren);
 void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[]);
 void generarEncabezado(char encab2[],int col,int ren);
-void negativoImagen(unsigned char ***tabla,int col,int ren);
+void negativoImagen(unsigned char **tabla,int col,int ren);
+void ecualizarImagen(unsigned char **tabla, int col, int ren);
+void ampliarImagenYGuardar(unsigned char **tabla,int col,int ren);
+void reducirImagenYGuardar(unsigned char **tabla,int col,int ren);
 
 int main(void)
 {
@@ -40,13 +43,13 @@ int main(void)
       switch (opcion)
         {
         case 1:
-          //negativoImagen(unsigned char ***tabla,int col,int ren);	  
+          negativoImagen(tabla,col,ren);	  
           break;
         case 2:
-          //Ecualizacion();
+	  ecualizarImagen(tabla,col,ren);
           break;
         case 3:
-          //AmpliarImage();
+          //ampliarImagen();
           break;
         case 4:
           //ReducirImagen();
@@ -77,7 +80,7 @@ int main(void)
 void Menu(int *opcion)
 {
   printf("Ingrese lo que desea hacer con una imagen\n");
-  printf("1.Negativo\n2.Ecualizacion\n3.Ampliar Imagen\n4.Reducir Imagen\n5.Guardar la anterior que realizaste\n6.Salir\n");
+  printf("1.Negativo\n2.Ecualizacion\n3.Ampliar Imagen\n4.Reducir Imagen\n5.Guardar la anterior que realizaste(solo para negativo y ecualizar, las otras directo\n6.Salir\n");
   scanf("%d",opcion);
 }
 
@@ -140,13 +143,6 @@ void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
 	    }
 	}
 
-      //Extra para entender
-      //fseek(archivo,sizeof(char)*5L,SEEK_CUR);
-      //fseek(archivo,0L,SEEK_SET);
-      //fread(&valP,1,1,archivo);
-      
-      //fread(&valP,1,1,archivo);
-      //printf("\nPrimer pixel es %d\n",valP);
     }
   else
     printf("El archivo no existe en la direccion de trabajo");
@@ -183,6 +179,58 @@ void Introduccion()
 
   Enter();
 }
+
+void negativoImagen(unsigned char **tabla,int col,int ren)
+{
+  int i,j;
+  for(i=0;i<ren;i++)
+    {
+      for(j=0;j<col;j++)
+	{
+	  tabla[i][j]=255-(tabla[i][j]);
+	}
+    }
+}
+
+void ecualizarImagen(unsigned char **tabla, int col, int ren)
+{
+  unsigned char max=tabla[0][0];
+  unsigned char min=tabla[0][0];
+  //unsigned char pixEQ[col][ren];
+  int i,j,m,b;
+
+  //ENCONTRAR MAXIMO
+  for(i=0; i<ren; i++)
+    {
+      for(j=0; j<col; j++)
+        {
+          if(tabla[i][j]>max)
+            {
+              max=tabla[i][j];
+            }
+          if(tabla[i][j]<min)
+            {
+              min=tabla[i][j];
+            }
+        }
+    }
+  //FIN DE ENCONTRAR MAXIMO
+
+  m = 255/(max-min);
+  b= -(255/(m*max));
+  
+  for(i=0; i<ren; i++)
+    {
+      for(j=0; j<col; j++)
+	{
+	  tabla[i][j] = m*tabla[i][j]+b;
+	}
+    }
+}
+
+
+
+
 
 
 void generarEncabezado(char encab2[],int col,int ren)
