@@ -3,18 +3,26 @@
 #include<string.h>
 
 void menu(int *opcion);
-void seleccionarImagenYObtColReng(int *col,int *ren);
+//void seleccionarImagen(FILE *archivo);
+void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50]);
 void crearMatriz(unsigned char **tabla,int col,int ren);
 void Introduccion();
 void Enter();
+void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50]);
 
 int main(void)
 {
   int opcion,col,ren;
   unsigned char **tabla;
+  char nombrearch[50];
+  //FILE *archivo;
   Introduccion();
-  seleccionarImagenYObtColReng(&col,&ren);
+  //seleccionarImagen(archivo);
+  seleccionarImagenYObtColReng(&col,&ren,nombrearch);
+  printf("\n%s",nombrearch);
+  //printf("%d,%d",col,ren);
   //crearMatriz(tabla,col,ren);
+  llenarMatriz(tabla,col,ren,nombrearch);
   
   do
     {
@@ -52,16 +60,32 @@ void menu(int *opcion)
   scanf("%d",opcion);
 }
 
-void seleccionarImagenYObtColReng(int *col,int *ren)
+/*
+void seleccionarImagen(FILE *archivo)
+{
+  char nombrearch[50];
+  printf("Por favor introduce el nombre del archivo de la imagen:");
+  __fpurge(stdin);
+  gets(nombrearch);
+  archivo=fopen(nombrearch,"rb");//este es el que
+  __fpurge(stdin);
+
+  if(archivo!=NULL)
+    {
+      printf("Si existe el archivo");
+    }
+  else
+    printf("El archivo no existe en la direccion de trabajo");
+  //fclose(archivo);
+}
+*/
+
+void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
 {
   FILE *archivo;
-  char nombrearch[50];
+  //char nombrearch[50];
   char Encabezado[15];
-  int valP;
-  //int numCol,numRen;
-  
-  //int numCol,numReng, valP;
-
+  unsigned char valP;
   printf("Por favor introduce el nombre del archivo de la imagen:");
   __fpurge(stdin);
   gets(nombrearch);
@@ -84,6 +108,7 @@ void seleccionarImagenYObtColReng(int *col,int *ren)
   else
     printf("El archivo no existe en la direccion de trabajo");
   fclose(archivo);
+  
 }
 
 void crearMatriz(unsigned char **tabla,int col,int ren)
@@ -99,14 +124,46 @@ void crearMatriz(unsigned char **tabla,int col,int ren)
     }
   free(tabla);
 }
-/*
-//Extra para entender
-      fseek(archivo,sizeof(char)*5L,SEEK_CUR);
+
+void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
+{
+  
+  //unsigned char tab[486][479];
+  FILE *archivo;
+  int i,j; //encab=15
+  
+  archivo=fopen(nombrearch,"rb");
+  __fpurge(stdin);
+  
+
+  if(archivo!=NULL)
+    {
+      fseek(archivo,sizeof(unsigned char)*15L,SEEK_SET);
+      for(i=0;i<486;i++)
+	{
+	  for(j=0;j<479;j++)
+	    {
+	      fread(&tab[i][j],1,1,archivo);	
+	      printf("\nPixel %d %d es %d\n",i,j,tab[i][j]);
+	    }
+	}
+
+      //Extra para entender
+      //fseek(archivo,sizeof(char)*5L,SEEK_CUR);
       //fseek(archivo,0L,SEEK_SET);
       //fread(&valP,1,1,archivo);
-      fread(&valP,1,1,archivo);
-      printf("Primer pixel es %d\n",valP);
-*/
+      
+      //fread(&valP,1,1,archivo);
+      //printf("\nPrimer pixel es %d\n",valP);
+    }
+  else
+    printf("El archivo no existe en la direccion de trabajo");
+  fclose(archivo);
+  
+
+  //fread(&valP,1,1,archivo);
+  //printf("\nPrimer pixel es %d\n",valP);
+}
 
 void Enter()
  {
