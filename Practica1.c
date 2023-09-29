@@ -4,15 +4,15 @@
 
 void menu(int *opcion);
 void seleccionarImagenYObtColReng(int *col,int *ren);
-void crearMatriz(int **tabla,int col,int ren);
+void crearMatriz(unsigned char **tabla,int col,int ren);
 
 int main(void)
 {
   int opcion,col,ren;
-  int **tabla;
+  unsigned char **tabla;
   printf("\nBienvenido al programa para modificar imagenes!\n");
   printf("-------------------------Practica 1--------------------------------------------\nProgramadores: \nBosco Attolini -227013-A\nFederico Pallach -208036-1\n");
-  seleccionarImagenYObtColReng(&col,&reng);
+  seleccionarImagenYObtColReng(&col,&ren);
   crearMatriz(tabla,col,ren);
   
   do
@@ -49,11 +49,6 @@ void menu(int *opcion)
   printf("Ingrese lo que desea hacer con una imagen\n");
   printf("1.Negativo\n2.Ecualizacion\n3.Ampliar Imagen\n4.Reducir Imagen\n5.Salir");
   scanf("%d",opcion);
-}
-
-//void carga(tipoalumno grupo[], int *insertados);
-void crearMatriz(int **tabla)
-{
 }
 
 void seleccionarImagenYObtColReng(int *col,int *ren)
@@ -111,3 +106,12 @@ void crearMatriz(unsigned char **tabla,int col,int ren)
       fread(&valP,1,1,archivo);
       printf("Primer pixel es %d\n",valP);
 */
+
+ void Enter()
+ {
+   char Basura;
+
+   __fpurge(stdin);
+   printf("Presiona <Enter> para continuar...");
+   Basura = getchar();
+ }
