@@ -260,7 +260,7 @@ void ampliarImagenYGuardar(unsigned char **tabla,int col,int ren)
 {
   FILE *archivo;
   char nombrearch[50],encab2[15];
-  int i=0,j=0,col2=col*2,ren2=ren*2;
+  int i=0,j=0,i2=0,j2=0,col2=col*2,ren2=ren*2;
 
   generarEncabezado(encab2,col2,ren2);
   printf("dame el nombre del archivo a generar: ");
@@ -272,12 +272,21 @@ void ampliarImagenYGuardar(unsigned char **tabla,int col,int ren)
       fwrite(encab2,sizeof(char),15,archivo);
       while(i<ren)
 	{
+	  j=0;
 	  while(j<col)
 	    {
 	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
-	      j=j+2;
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      j++;
 	    }
-	  i=i+2;
+	  j=0;
+	  while(j<col)
+	    {
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      j++;
+	    } 
+	  i++;
 	}
       fclose(archivo);
     }
