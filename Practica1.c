@@ -228,7 +228,62 @@ void ecualizarImagen(unsigned char **tabla, int col, int ren)
     }
 }
 
+void reducirImagenYGuardar(unsigned char **tabla,int col,int ren)
+{
+  FILE *archivo;
+  char nombrearch[50],encab2[15];
+  int i=0,j=0,col2=col/2,ren2=ren/2;
 
+  generarEncabezado(encab2,col2,ren2);
+  printf("dame el nombre del archivo a generar: ");
+  __fpurge(stdin);
+  gets(nombrearch);
+  archivo=fopen(nombrearch,"wb");
+  if(archivo!=NULL)
+    {
+      fwrite(encab2,sizeof(char),15,archivo);
+      while(i<ren)
+	{
+	  while(j<col)
+	    {
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      j=j+2;
+	    }
+	  i=i+2;
+	}
+      fclose(archivo);
+    }
+
+
+}
+void ampliarImagenYGuardar(unsigned char **tabla,int col,int ren)
+{
+  FILE *archivo;
+  char nombrearch[50],encab2[15];
+  int i=0,j=0,col2=col*2,ren2=ren*2;
+
+  generarEncabezado(encab2,col2,ren2);
+  printf("dame el nombre del archivo a generar: ");
+  __fpurge(stdin);
+  gets(nombrearch);
+  archivo=fopen(nombrearch,"wb");
+  if(archivo!=NULL)
+    {
+      fwrite(encab2,sizeof(char),15,archivo);
+      while(i<ren)
+	{
+	  while(j<col)
+	    {
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      j=j+2;
+	    }
+	  i=i+2;
+	}
+      fclose(archivo);
+    }
+
+
+}
 
 
 
