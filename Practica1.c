@@ -34,7 +34,7 @@ int main(void)
   //FIN DE CODIGO EN MAIN
   
   llenarMatriz(tabla,col,ren,nombrearch);
-  printf("\nPrueba de que se lee el archivo,\nEl elemento 0,3 es: %d",tabla[0][3]);   SI PODEMOS LEER BIEN LA TABLA
+  printf("\nPrueba de que se lee el archivo,El elemento 0,3 es: %d",tabla[0][3]);   //SI PODEMOS LEER BIEN LA TABLA
   do
     {
       Menu(&opcion);
