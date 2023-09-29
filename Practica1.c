@@ -32,7 +32,6 @@ int main(void)
       tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
     }
   //FIN DE CODIGO EN MAIN
-  generarEncabezado(encab2,col,ren); //col2 ren2 realmente
   llenarMatriz(tabla,col,ren,nombrearch);
   //printf("\n%d",tabla[0][3]);   SI PODEMOS LEER BIEN LA TABLA
   do
@@ -53,7 +52,8 @@ int main(void)
           //ReducirImagen();
           break;
 	case 5:
-	  //guardarImagen(tabla,col,ren,encab2);
+	  generarEncabezado(encab2,col,ren); //col2 ren2 realmente
+	  guardarImagen(tabla,col,ren,encab2);
         case 6:
           printf("Buen dia\n");
 	  //Cerrar(tabla,ren);   //INICIA CODIGO EN MAIN
@@ -81,25 +81,6 @@ void Menu(int *opcion)
   scanf("%d",opcion);
 }
 
-/*
-void seleccionarImagen(FILE *archivo)
-{
-  char nombrearch[50];
-  printf("Por favor introduce el nombre del archivo de la imagen:");
-  __fpurge(stdin);
-  gets(nombrearch);
-  archivo=fopen(nombrearch,"rb");//este es el que
-  __fpurge(stdin);
-
-  if(archivo!=NULL)
-    {
-      printf("Si existe el archivo");
-    }
-  else
-    printf("El archivo no existe en la direccion de trabajo");
-  //fclose(archivo);
-}
-*/
 
 void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
 {
@@ -117,21 +98,13 @@ void seleccionarImagenYObtColReng(int *col,int *ren,char nombrearch[50])
     {
       fread(Encabezado,sizeof(unsigned char),15,archivo);
       sscanf(Encabezado,"P5 %d %d 255 ", col, ren);
-
-      //Extra para entender
-      //fseek(archivo,sizeof(char)*5L,SEEK_CUR);
-      //fseek(archivo,0L,SEEK_SET);
-      //fread(&valP,1,1,archivo);
-      
-      //fread(&valP,1,1,archivo);
-      //printf("\nPrimer pixel es %d\n",valP);
     }
   else
     printf("El archivo no existe en la direccion de trabajo");
   fclose(archivo);
   
 }
-/*
+/*    ESTA LA PROGRAMAMOS DIRECTO EN EL MAIN
 void crearMatriz(unsigned char ***tabla,int col,int ren)
 {
   int i;
@@ -143,6 +116,8 @@ void crearMatriz(unsigned char ***tabla,int col,int ren)
     //Liberar en Cerrar()
 }
 */
+
+
 void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
 {
   
@@ -213,22 +188,16 @@ void Introduccion()
 
 void generarEncabezado(char encab2[],int col,int ren)
 {
-  /*
   char colS[4],renS[4];
   sprintf(colS, "%d", col);
   sprintf(renS, "%d", ren);
-  //encab2=("P5 %s %s 255 ",colS,renS);
-  //snprintf(encab2, sizeof(encab2), "P5 %s %s 255", colS, renS);
-  //puts(colS);
-  //encab2 ="P5 ";
-  //strcat(encab2,cols)
   strcpy(encab2,"P5 ");
   strcat(encab2,colS);
   strcat(encab2," ");
   strcat(encab2,renS);
   strcat(encab2," 255 ");
-  puts(encab2);
-  */
+  __fpurge(stdin);
+  puts(encab2); //TIENE SEGMENTATION FAULT
 }
 
 void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
@@ -236,8 +205,6 @@ void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
   FILE *archivo;
   char nombrearch[50];
   int i,j;
-
-  
   printf("dame el nombre del archivo a generar: ");
   __fpurge(stdin);
   gets(nombrearch);
@@ -256,7 +223,7 @@ void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
     }
 }
 
-
+//CERRAR LA PROGRAMAMOS DIRECTO EN EL MAIN
 void Cerrar(unsigned char **tabla,int ren)
 {
   int i;
