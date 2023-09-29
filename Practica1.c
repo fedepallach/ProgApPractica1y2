@@ -5,15 +5,16 @@
 void menu(int *opcion);
 void seleccionarImagenYObtColReng(int *col,int *ren);
 void crearMatriz(unsigned char **tabla,int col,int ren);
+void Introduccion();
+void Enter();
 
 int main(void)
 {
   int opcion,col,ren;
   unsigned char **tabla;
-  printf("\nBienvenido al programa para modificar imagenes!\n");
-  printf("-------------------------Practica 1--------------------------------------------\nProgramadores: \nBosco Attolini -227013-A\nFederico Pallach -208036-1\n");
+  Introduccion();
   seleccionarImagenYObtColReng(&col,&ren);
-  crearMatriz(tabla,col,ren);
+  //crearMatriz(tabla,col,ren);
   
   do
     {
@@ -107,7 +108,7 @@ void crearMatriz(unsigned char **tabla,int col,int ren)
       printf("Primer pixel es %d\n",valP);
 */
 
- void Enter()
+void Enter()
  {
    char Basura;
 
@@ -115,3 +116,21 @@ void crearMatriz(unsigned char **tabla,int col,int ren)
    printf("Presiona <Enter> para continuar...");
    Basura = getchar();
  }
+
+void Introduccion()
+{
+  system("clear");
+  printf("\t-PRÁCTICA 1-\n");
+  printf("Bosco Attolini Gay 22013-A\n");
+  printf("Federico Pallach Loose 208036-1\n\n");
+
+  Enter();
+  printf("Bienvenido, este programa utilizara una imagen con el formato PGM y la modificara digitalmente de las siguientes 4 maneras \n\n");
+  printf("-Creara el negativo de la imagen\n     En donde los valores de luminiscencia en la escala de grises de cada pixel se invertirá con respecto al maximo y al mínimo valor posible.");
+  printf("-Creara una ecualización lineal de la imagen\n           En donde se normalizaran los valores de luminiscencia de la imagen para que se ocupe todo el rango posible.");
+  printf("-Creara una reducción de la imagen\n   En donde la imagen original se verá reducida a un cuarto de su tamaño inicial.");
+  printf("-Creara una ampliación de la imagen\n  En donde la imagen original tendrá 4 veces el tamaño de la imagen original.");
+  printf("Todos estos cambios se guardaran en un nuevo archivo con nombre dado por el usuario, dejando la imagen original intacta.");
+
+  Enter();
+}
