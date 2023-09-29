@@ -10,18 +10,21 @@ void Introduccion();
 void Enter();
 void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50]);
 void Cerrar(unsigned char **tabla,int ren);
+void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[]);
+void generarEncabezado(char encab2[],int col,int ren);
+void negativoImagen(unsigned char ***tabla,int col,int ren);
 
 int main(void)
 {
   int opcion,col,ren,i;
   unsigned char **tabla;
-  char nombrearch[50];
+  char nombrearch[50],encab2[20];
   //FILE *archivo;
   Introduccion();
   //seleccionarImagen(archivo);
   seleccionarImagenYObtColReng(&col,&ren,nombrearch);
   printf("\n%s",nombrearch);
-
+  
   //crearMatriz(&tabla,col,ren); //CODIGO EN MAIN
   tabla = (unsigned char**)malloc(sizeof(unsigned char*)*ren);
   for(i=0; i<ren;i++)
@@ -29,16 +32,16 @@ int main(void)
       tabla[i]=(unsigned char*)malloc(sizeof(unsigned char)*col);
     }
   //FIN DE CODIGO EN MAIN
-
-  
+  generarEncabezado(encab2,col,ren); //col2 ren2 realmente
   llenarMatriz(tabla,col,ren,nombrearch);
+  //printf("\n%d",tabla[0][3]);   SI PODEMOS LEER BIEN LA TABLA
   do
     {
       Menu(&opcion);
       switch (opcion)
         {
         case 1:
-          //Negativo();	  
+          //negativoImagen(unsigned char ***tabla,int col,int ren);	  
           break;
         case 2:
           //Ecualizacion();
@@ -49,9 +52,10 @@ int main(void)
         case 4:
           //ReducirImagen();
           break;
-        case 5:
+	case 5:
+	  //guardarImagen(tabla,col,ren,encab2);
+        case 6:
           printf("Buen dia\n");
-	  
 	  //Cerrar(tabla,ren);   //INICIA CODIGO EN MAIN
 	  for(i=0;i<ren;i++)
 	    {
@@ -65,7 +69,7 @@ int main(void)
 	  printf("La opcion es invalida\n");
           break;
         }
-    }while(opcion!=5);
+    }while(opcion!=6);
 
   
 }
@@ -73,7 +77,7 @@ int main(void)
 void Menu(int *opcion)
 {
   printf("Ingrese lo que desea hacer con una imagen\n");
-  printf("1.Negativo\n2.Ecualizacion\n3.Ampliar Imagen\n4.Reducir Imagen\n5.Salir");
+  printf("1.Negativo\n2.Ecualizacion\n3.Ampliar Imagen\n4.Reducir Imagen\n5.Guardar la anterior que realizaste\n6.Salir\n");
   scanf("%d",opcion);
 }
 
@@ -153,12 +157,12 @@ void llenarMatriz(unsigned char **tabla,int col,int ren,char nombrearch[50])
   if(archivo!=NULL)
     {
       fseek(archivo,sizeof(unsigned char)*15L,SEEK_SET);
-      for(i=0;i<486;i++)//486
+      for(i=0;i<ren;i++)//486
 	{
-	  for(j=0;j<479;j++)//479
+	  for(j=0;j<col;j++)//479
 	    {
 	      fread(&tabla[i][j],1,1,archivo);	
-	      printf("\nPixel %d %d es %d\n",i,j,tabla[i][j]);
+	      //printf("\nPixel %d %d es %d\n",i,j,tabla[i][j]);
 	    }
 	}
 
@@ -205,6 +209,53 @@ void Introduccion()
 
   Enter();
 }
+
+
+void generarEncabezado(char encab2[],int col,int ren)
+{
+  /*
+  char colS[4],renS[4];
+  sprintf(colS, "%d", col);
+  sprintf(renS, "%d", ren);
+  //encab2=("P5 %s %s 255 ",colS,renS);
+  //snprintf(encab2, sizeof(encab2), "P5 %s %s 255", colS, renS);
+  //puts(colS);
+  //encab2 ="P5 ";
+  //strcat(encab2,cols)
+  strcpy(encab2,"P5 ");
+  strcat(encab2,colS);
+  strcat(encab2," ");
+  strcat(encab2,renS);
+  strcat(encab2," 255 ");
+  puts(encab2);
+  */
+}
+
+void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
+{
+  FILE *archivo;
+  char nombrearch[50];
+  int i,j;
+
+  
+  printf("dame el nombre del archivo a generar: ");
+  __fpurge(stdin);
+  gets(nombrearch);
+  archivo=fopen(nombrearch,"wb");
+  if(archivo!=NULL)
+    {
+      fwrite(encab2,sizeof(char),15,archivo);
+      for(i=0;i<ren;i++)
+	{
+	  for(j=0;j<col;j++)
+	    {
+	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos...
+	    }
+	}
+      fclose(archivo);
+    }
+}
+
 
 void Cerrar(unsigned char **tabla,int ren)
 {
