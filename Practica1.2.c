@@ -243,7 +243,7 @@ void reducirImagenYGuardar(unsigned char **tabla,int col,int ren)
 	{
 	  while(j<col)
 	    {
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      fwrite(&tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
 	      j=j+2;
 	    }
 	  i=i+2;
@@ -272,15 +272,15 @@ void ampliarImagenYGuardar(unsigned char **tabla,int col,int ren)
 	  j=0;
 	  while(j<col)
 	    {
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      fwrite(&tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault    //fwrite(&tabla[i][j], ...
+	      fwrite(&tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
 	      j++;
 	    }
 	  j=0;
 	  while(j<col)
 	    {
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      fwrite(&tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      fwrite(&tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
 	      j++;
 	    } 
 	  i++;
@@ -324,7 +324,7 @@ void guardarImagen(unsigned char **tabla,int col,int ren,char encab2[])
 	{
 	  for(j=0;j<col;j++)
 	    {
-	      fwrite(tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
+	      fwrite(&tabla[i][j],1,1,archivo); //marca errores por los tipos... y genera seg fault
 	    }
 	}
       fclose(archivo);
